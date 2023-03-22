@@ -4,8 +4,7 @@ body {
     background-image: url('img/bg.webp');
     background-repeat: repeat-y;
     background-position: center;
-    background-size: cover;
-    /* height: 90vh; */
+    background-size: auto;
 }
 
 .container {
@@ -23,31 +22,25 @@ body {
     padding: 20px 50px;
     flex-wrap: wrap;
     background-color: rgba(0,0,0, 0.3);
-}
-.desc-table {
-    display: flex;
-    justify-content: space-evenly;
-    width: 100%;
-    height: 45vh;
-    border: 1px solid black;
-    box-sizing: border-box;
-    padding: 20px;
+    margin-bottom: 70px;
 }
 
 .panel {
     position: fixed;
     bottom: 0;
+    left: 20%;
     display: flex;
     justify-content: space-around;
-    min-height: 10vh;
-    width: 85%;
+    width: 60%;
     background-color: lightseagreen;
     padding: 10px;
     box-sizing: border-box;
+    z-index: 2000;
 }
 
 .btn {
-    width: 20%;
+    width: 90%;
+    min-height: 50px;
 }
 
 .card-img {
@@ -61,7 +54,6 @@ body {
     border-radius: 19px;
     margin-bottom: 30px;
     z-index: 20;
-    margin: 10px;
 }
 
 .card-desc {
