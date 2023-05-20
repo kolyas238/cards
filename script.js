@@ -1,4 +1,4 @@
-let arr = ['дом', 'участвовать', 'опасность', 'смятение', 'давать', 'идти', 'стыд', 'жертва', 'успех', 'раб', 'скрывать', 'сон', 'отвращение', 'приспособиться', 'вина', 'гомосексуальность', 'горе', 'мудрый', 'неприязнь', 'голый', 'внешность', 'позор', 'глупец', 'потерпеть неудачу', '   ', 'босс', 'отступать', 'радость', 'скука', 'твердый', 'борьба за власть', 'тревога', 'измученный', 'угроза', 'сопротивляться', 'любить', 'жесткий', 'ребёнок', 'цикл', 'нарушать', 'ждать', 'сломать', 'чудесный', 'привычка', 'вцепиться', 'боль', 'игра', 'гнев', 'женщины', 'отец', 'отпускать', 'саморазрушение', 'устранять', 'ложь', 'надежда', 'незнакомцы', 'привлекательный', 'унижать', 'одинокий', 'соперник', 'недоумение', 'привязанность', '   ', 'смешной', 'вытеснять', 'неправильный', 'начало', 'страх', 'запугивать', 'очарование', 'быть в долгу', 'смех', 'хвастаться', 'принуждение', 'изменять', 'знаток', 'брать', 'извинение', 'гниение', 'обязан', 'уродливый', 'мать', 'сомнение', 'ненависть', 'мужчины', 'атака', 'зависимый', 'эротический', 'поза', 'остановиться'];
+const WORDS = ['дом', 'участвовать', 'опасность', 'смятение', 'давать', 'идти', 'стыд', 'жертва', 'успех', 'раб', 'скрывать', 'сон', 'отвращение', 'приспособиться', 'вина', 'гомосексуальность', 'горе', 'мудрый', 'неприязнь', 'голый', 'внешность', 'позор', 'глупец', 'потерпеть неудачу', '   ', 'босс', 'отступать', 'радость', 'скука', 'твердый', 'борьба за власть', 'тревога', 'измученный', 'угроза', 'сопротивляться', 'любить', 'жесткий', 'ребёнок', 'цикл', 'нарушать', 'ждать', 'сломать', 'чудесный', 'привычка', 'вцепиться', 'боль', 'игра', 'гнев', 'женщины', 'отец', 'отпускать', 'саморазрушение', 'устранять', 'ложь', 'надежда', 'незнакомцы', 'привлекательный', 'унижать', 'одинокий', 'соперник', 'недоумение', 'привязанность', '   ', 'смешной', 'вытеснять', 'неправильный', 'начало', 'страх', 'запугивать', 'очарование', 'быть в долгу', 'смех', 'хвастаться', 'принуждение', 'изменять', 'знаток', 'брать', 'извинение', 'гниение', 'обязан', 'уродливый', 'мать', 'сомнение', 'ненависть', 'мужчины', 'атака', 'зависимый', 'эротический', 'поза', 'остановиться'];
 
 let imgTable = document.querySelector('.img-table');
 let imgBtn = document.querySelector('.btn-img');
@@ -41,12 +41,12 @@ descBtn.addEventListener('click', () => {
   let textArr = imgTable.querySelectorAll('.card-desc');
   textArr.forEach((item) => {
     if (item.innerText === '') {
-      if (arr.length === 0) {
+      if (WORDS.length === 0) {
         console.log('All words have been used');
         return;
       }
-      let randomIndex = getRandomIntInclusive(0, arr.length - 1);
-      item.innerText = arr.splice(randomIndex, 1)[0];
+      let randomIndex = getRandomIntInclusive(0, WORDS.length - 1);
+      item.innerText = WORDS.splice(randomIndex, 1)[0];
     }
   });
   handler();
@@ -88,6 +88,35 @@ function handler() {
       };
     };
 
+    item.ontouchstart = function (e) {
+      e.preventDefault();
+      var touch = e.touches[0];
+      var coords = getCoords(item);
+      var shiftX = touch.pageX - coords.left;
+      var shiftY = touch.pageY - coords.top;
+
+      item.style.position = 'absolute';
+      imgTable.appendChild(item);
+      moveAt(touch);
+
+      item.style.zIndex = 1000;
+
+      function moveAt(touch) {
+        item.style.left = touch.pageX - shiftX + 'px';
+        item.style.top = touch.pageY - shiftY + 'px';
+      }
+
+      document.ontouchmove = function (e) {
+        var touch = e.touches[0];
+        moveAt(touch);
+      };
+
+      item.ontouchend = function () {
+        document.ontouchmove = null;
+        item.ontouchend = null;
+      };
+    };
+
     item.ondragstart = function () {
       return false;
     };
@@ -96,9 +125,17 @@ function handler() {
 
 function getCoords(elem) {
   var box = elem.getBoundingClientRect();
+  let offset = 0;
+  if (window.screen.width < 768) {
+    offset = 80
+  } else {
+    offset = 124;
+  }
 
   return {
     top: box.top + scrollY,
-    left: box.left + scrollX + 124
+    left: box.left + scrollX + offset
   };
 }
+
+
